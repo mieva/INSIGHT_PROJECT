@@ -82,7 +82,7 @@ def test_model_prediction(image, model):
 		#x2, y2 = x + width, y + height
 		x, y, x2, y2 = box
 		# draw a rectangle over the pixels
-		rectangle(img, (x, y), (x2, y2), (255,0,0), 2)
+		rectangle(img, (int(x), int(y)), (int(x2), int(y2)), (255,0,0), 2)
 		# draw a rectangle over the pixels
 		#rectangle(img, (x, y), (x2, y2), (255,0,0), 1)
 		#sample = cv2.rectangle(img, pt1=(y, x), pt2=(y2, x2), color=(0, 0, 255), thickness=3)
@@ -131,7 +131,6 @@ def main():
 		num_detected_fruit = test_model_prediction(filename, model)
 
 		st.write('Detected `%d` objects' % num_detected_fruit)
-
 
 
 # External files to download.
