@@ -10,7 +10,7 @@ root_dir = '/content/drive/My Drive/INSIGHTPROGRAM/Data/detection/detection/trai
 output_dir = '/content/drive/My Drive/INSIGHTPROGRAM/MODEL_OUTPUT/'
 weights_path = '/content/drive/My Drive/INSIGHTPROGRAM/MODEL_OUTPUT/model_frozen_19.pth'
 ground_truth_file = '/content/drive/My Drive/INSIGHTPROGRAM/MODEL_OUTPUT/model_gt.csv'
-prediction_file = '/content/drive/My Drive/INSIGHTPROGRAM/MODEL_OUTPUT/model_prediction.csv'
+prediction_file = '/content/drive/My Drive/INSIGHTPROGRAM/MODEL_OUTPUT/model_predictions.csv'
 
 
 if __name__ == "__main__":
