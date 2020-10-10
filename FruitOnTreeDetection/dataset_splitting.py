@@ -1,6 +1,7 @@
 import torch
 from FruitOnTreeDetection.apple_dataset import AppleDataset
 from FruitOnTreeDetection.Utilities.transforms import get_transform
+from Vision import utils
 
 
 root_dir = '/content/drive/My Drive/INSIGHTPROGRAM/Data/detection/detection/train/'
