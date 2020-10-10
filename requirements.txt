@@ -1,3 +1,10 @@
+cython
+git+https://github.com/cocodataset/cocoapi.git#subdirectory=PythonAPI
+Pillow
+torch == 1.6.0
+torchvision == 0.7.0
+opencv-python
+Shapely
+pickleshare
+streamlit
 
-
--U 'git+https://github.com/cocodataset/cocoapi.git#subdirectory=PythonAPI'
