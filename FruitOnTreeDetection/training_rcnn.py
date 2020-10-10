@@ -67,7 +67,10 @@ def train_rcnn(data_loader, output_dir, num_epochs=10, weights_path=None):
     # SET THE MODEL TO TRAIN
     model = get_instance_frcnn_model(num_classes=2, freeze=False)
     if weights_path:
-        model.load_state_dict(torch.load(weights_path))
+        if torch.cuda.is_available():
+            model.load_state_dict(torch.load(weights_path))
+        else:
+            model.load_state_dict(torch.load(weights_path), map_location=torch.device('cpu'))
 
     #model = get_instance_frcnn_model(num_classes, freeze=True)
 
