@@ -16,7 +16,6 @@ def pred_to_df(output_file):
   df_predictions['p_x2'] = df_predictions.p_x2.astype(float)
   df_predictions['p_y2'] = df_predictions.p_y2.astype(float)
 
-
   return df_predictions
 
 def gt_to_df(output_file):
@@ -51,9 +50,10 @@ def iou(xbl_1, ybl_1, xtr_1, ytr_1, xbl_2, ybl_2, xtr_2, ytr_2):
     return box_1.intersection(box_2).area / box_1.union(box_2).area
 
 # Function to get df_metrics
-def get_df_metrics(df_gt, df_predictions):
+# Function to get df_metrics for both models
+def get_df_metrics(df_gt, df_predictions, score_cut=0.9):
 
-    df = pd.merge(df_gt, df_predictions, how='inner', on='img_name')
+    df = pd.merge(df_gt, df_predictions, how='left', on='img_name')
 
     # Calculate iou for each image and for each gt boxes
     df['iou'] = df[['gt_x1', 'gt_y1', 'gt_x2', 'gt_y2', 'p_x1', 'p_y1', 'p_x2', 'p_y2']]. \
@@ -67,9 +67,10 @@ def get_df_metrics(df_gt, df_predictions):
     # Apply the cut at 0.5 and create the metrics df
     df_metrics = \
     pd.merge(pd.merge(
-        df_predictions.groupby('img_name')['score'].count().reset_index().rename(columns={"score": "p_num_boxes"}),
+        df_predictions[df_predictions['score']>score_cut]. \
+            groupby('img_name')['score'].count().reset_index().rename(columns={"score": "p_num_boxes"}),
         df_iou[df_iou['iou'] > 0.5].groupby('img_name')['iou'].count().reset_index().rename(columns={"iou": "true_pos"}),
-            on='img_name', how='inner'),
+        on='img_name', how='inner'),
              df_gt.groupby('img_name')['gt_x1'].count().reset_index().rename(columns={"gt_x1": "t_num_boxes"}),
              on='img_name', how='inner'
              )
@@ -92,19 +93,17 @@ def get_overall_performance(df):
     return precision, recall, fscore
 
 
-
-
-
-
-def main(args):
-    gt_file = '/content/drive/My Drive/INSIGHTPROGRAM/MODEL_OUTPUT/model_gt.csv'
+def make_evaluation_on_dataset(gt_file, prediction_file):
+    """
+    Function to evaluate model performances
+    :param gt_file: Groung_truth file with bbx
+    :param prediction_file: Predicition file with bbx
+    :return:
+    """
+    # Ground truth
     df_gt = gt_to_df(gt_file)
-
-    # output_file = '/content/drive/My Drive/INSIGHTPROGRAM/MODEL_OUTPUT/model_predictions.csv'
-    # df_predictions = pred_to_df(output_file)
-
-    output_file = '/content/drive/My Drive/INSIGHTPROGRAM/MODEL_OUTPUT/model_predictions_weights_9.csv'
-    df_predictions = pred_to_df(output_file)
+    # Predictions
+    df_predictions = pred_to_df(prediction_file)
 
     # Create the metrics data frame
     df_metrics = get_df_metrics(df_gt, df_predictions)
@@ -137,6 +136,3 @@ def main(args):
     print(f'The overall precision is {overall_precision:.3f}')
     print(f'The overall recall is {overall_recall:.3f}.')
     print(f'The overall F1_score is {overall_fscore:.3f}.')
-
-if __name__ == "__main__":
-    main()

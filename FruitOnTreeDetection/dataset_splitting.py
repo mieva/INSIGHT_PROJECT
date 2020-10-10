@@ -28,7 +28,10 @@ def data_preparation(root_dir, splitting_index=200):
 
     dataset = torch.utils.data.Subset(dataset, indices[:-splitting_index])
     dataset_test = torch.utils.data.Subset(dataset_test, indices[-splitting_index:])
+    return dataset, dataset_test
 
+
+def dataloader(dataset, dataset_test):
     # define training and validation data loaders
     print("Creating data loaders")
     data_loader = torch.utils.data.DataLoader(
