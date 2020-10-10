@@ -1,5 +1,11 @@
-# To make Data augmentation
+from Vision import transforms as T
+
 def get_transform(train):
+    """
+    # To make Data augmentation
+    :param train:
+    :return:
+    """
     transforms = []
     # converts the image, a PIL image, into a PyTorch Tensor
     transforms.append(T.ToTensor())
