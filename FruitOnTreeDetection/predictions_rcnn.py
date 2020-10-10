@@ -94,12 +94,13 @@ def test_apple_detection(image, model):
         # draw a rectangle over the pixels
         rectangle(img, (int(x), int(y)), (int(x2), int(y2)), (255, 0, 0), 2)
 
+    return img, prediction
+
     # show the image
-    fig = plt.figure(figsize=(9, 12))
+    # fig = plt.figure(figsize=(9, 12))
     # plt.axis("off")
-    plt.imshow(img)
-    # plt.show()
+    # plt.imshow(img)
 
     # Save example
-    plt.savefig('/content/drive/My Drive/INSIGHTPROGRAM/MODEL_OUTPUT/single_fig_preds.png')
-    plt.close(fig)
+    # plt.savefig('/content/drive/My Drive/INSIGHTPROGRAM/MODEL_OUTPUT/single_fig_preds.png')
+    # plt.close(fig)
