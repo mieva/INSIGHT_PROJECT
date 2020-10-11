@@ -49,7 +49,7 @@ def main(weights_path):
     st.title('Fruit On Tree Detection App')
 
     # Ask to select a file
-    filename = file_selector()
+    filename = file_selector('./Images/')
     st.write('You selected `%s`' % filename)
 
     # Display selected image
@@ -63,7 +63,7 @@ def main(weights_path):
         if torch.cuda.is_available():
             model.load_state_dict(torch.load(weights_path))
         else:
-            model.load_state_dict(torch.load(weights_path), map_location=torch.device('cpu'))
+            model.load_state_dict(torch.load(weights_path, map_location=torch.device('cpu')))
 
         # Display the annotated image by running the model.
         num_detected_fruit = model_prediction(filename, model)
@@ -74,7 +74,7 @@ def main(weights_path):
 
 if __name__ == "__main__":
 
-    weights_path = '/content/drive/My Drive/INSIGHTPROGRAM/MODEL_OUTPUT/model_12.pth'
+    weights_path = './models/model_12.pth'
 
     parser = argparse.ArgumentParser()
     # parser.add_argument('--root_dir', type=str, default=root_dir,
