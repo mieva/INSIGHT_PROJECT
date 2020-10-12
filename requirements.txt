@@ -7,4 +7,5 @@ opencv-python
 Shapely
 pickleshare
 streamlit
+protobuf == 3.13.0
 
