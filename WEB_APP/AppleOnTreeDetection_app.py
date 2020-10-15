@@ -4,9 +4,11 @@
 import streamlit as st
 import os
 
+import pandas as pd
+import math
+
 # Image processing
 from PIL import Image
-from cv2 import rectangle
 
 import argparse
 
@@ -41,10 +43,42 @@ def model_prediction(image, model):
     # show the image
     st.image(img, width=200, caption='Detected objects')
     num_obj = len(prediction['boxes'])
-    return num_obj
+    return num_obj, prediction
+
+def get_r_componets(df):
+  # Function to calculate x_max - x_min, y_max - y_min
+  x_max = df['p_x2'].max()
+  x_min = df['p_x1'].min()
+  d1 = x_max - x_min
+
+  y_max = df['p_y2'].max()
+  y_min = df['p_y1'].min()
+  d2 = y_max - y_min
+
+  d_mean = (d1 + d2)/2
+
+  # Mean dimension of a bbx
+  df['dx'] = df['p_x2'] - df['p_x1']
+  bbx_size_mean = df['dx'].mean()
+  bbx_size_std = df['dx'].std()
+
+  return d_mean, bbx_size_mean, bbx_size_std
+
+def get_form_factor(dmean, bbx_size_mean, bbx_size_std):
+  # Function to create a df with the form factor estimation first verion
+  # df = pd.DataFrame(data=[dmean, bbx_size_mean, bbx_size_std]).T
+  # df.columns = ['dmean', 'bbx_size_mean', 'bbx_size_std']
+  #df['form_factor'] = (df['d1']*df['d1'] + df['d2']*df['d2']).apply(lambda x: 2/3*math.sqrt(x))
+  #df['form_factor'] = (2/3*(dmean/2))/(bbx_size_mean+bbx_size_std)
+  form_factor = (1/3*(dmean/2))/(bbx_size_mean+bbx_size_std)
+
+  return form_factor
 
 
 def main(weights_path):
+
+    avg_prec = 0.71
+
     # Title
     st.title('Fruit On Tree Detection App')
 
@@ -66,10 +100,26 @@ def main(weights_path):
             model.load_state_dict(torch.load(weights_path, map_location=torch.device('cpu')))
 
         # Display the annotated image by running the model.
-        num_detected_fruit = model_prediction(filename, model)
+        num_detected_fruit, prediction = model_prediction(filename, model)
 
-        apple_mean_weight = 0.3
-        st.write('Estimated yield is `%.2f` kg' % (num_detected_fruit*apple_mean_weight))
+        # creating a Dataframe object
+        df_prediction = pd.DataFrame(prediction)
+
+        # take the r components
+        d_mean, bbx_size_mean, bbx_size_std = get_r_componets(df_prediction)
+
+        # form factor
+        form_factor = get_form_factor(d_mean, bbx_size_mean, bbx_size_std)
+
+        # Correct the detected number of fruit by avg precision
+        num_detected_fruit_corrected = num_detected_fruit*avg_prec
+
+        # Estimated number of fruits on the whoole tree
+        estimated_fruit_on_tree = num_detected_fruit_corrected*form_factor
+
+        st.write('Number of detected fruit in the image is `%d`' % num_detected_fruit_corrected)
+        st.write('Estimated number of fruits on the whole tree is `%d`' % estimated_fruit_on_tree)
+        #st.write('Estimated yield is `%.2f` kg' % (num_detected_fruit*apple_mean_weight))
 
 
 if __name__ == "__main__":
