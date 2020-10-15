@@ -104,6 +104,13 @@ def main(weights_path):
 
         # creating a Dataframe object
         df_prediction = pd.DataFrame(prediction)
+        df_prediction[['p_x1', 'p_y1', 'p_x2', 'p_y2']] = pd.DataFrame(df_prediction['boxes'].tolist(),
+                                                                       index=df_prediction.index)
+        df_prediction['p_x1'] = df_prediction['p_x1'].apply(lambda x: x.detach().numpy())
+        df_prediction['p_y1'] = df_prediction['p_x1'].apply(lambda x: x.detach().numpy())
+        df_prediction['p_x2'] = df_prediction['p_x1'].apply(lambda x: x.detach().numpy())
+        df_prediction['p_y2'] = df_prediction['p_x1'].apply(lambda x: x.detach().numpy())
+        #print(df_prediction.drop('boxes', axis=1).head())
 
         # take the r components
         d_mean, bbx_size_mean, bbx_size_std = get_r_componets(df_prediction)
