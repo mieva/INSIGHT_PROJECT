@@ -5,7 +5,7 @@ even everyone want to be proud of what he was able to grow in the
 backyard.
 
 <p align="center">
-	<img src="./imgs/concept.png" width="400">
+	<img src="./imgs/web_app_image1.png" width="400">
 </p>
 
 ## Installation
@@ -29,7 +29,7 @@ evaluation.)
 ## WEB APP
 The app is publicly at:
 
-* http:
+* http://13.57.192.202:8501
 
 The code is in the WEB_APP forder.
 
