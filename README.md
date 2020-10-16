@@ -5,7 +5,7 @@ even everyone want to be proud of what he was able to grow in the
 backyard.
 
 <p align="center">
-	<img src="./imgs/web_app_image1.png" width="400">
+	<img src="./imgs/Web_App_picture.png" width="600">
 </p>
 
 ## Installation
