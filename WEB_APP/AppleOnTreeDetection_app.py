@@ -78,6 +78,7 @@ def get_form_factor(dmean, bbx_size_mean, bbx_size_std):
 def main(weights_path):
 
     avg_prec = 0.71
+    avg_apple_weight = 0.195
 
     # Title
     st.title('Fruit On Tree Detection App')
@@ -126,7 +127,7 @@ def main(weights_path):
 
         st.write('Number of detected fruit in the image is `%d`' % num_detected_fruit_corrected)
         st.write('Estimated number of fruits on the whole tree is `%d`' % estimated_fruit_on_tree)
-        #st.write('Estimated yield is `%.2f` kg' % (num_detected_fruit*apple_mean_weight))
+        st.write('Estimated yield on this tree is `%.2f` kg' % (estimated_fruit_on_tree*avg_apple_weight))
 
 
 if __name__ == "__main__":
